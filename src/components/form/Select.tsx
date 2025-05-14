@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import React, { useState } from "react";
 
 interface Option {
@@ -15,11 +16,12 @@ interface SelectProps {
 
 const Select: React.FC<SelectProps> = ({
   options,
-  placeholder = "Select an option",
+  placeholder = null,
   onChange,
   className = "",
   defaultValue = "",
 }) => {
+  const t = useTranslations("select")
   // Manage the selected value
   const [selectedValue, setSelectedValue] = useState<string>(defaultValue);
 
@@ -28,6 +30,8 @@ const Select: React.FC<SelectProps> = ({
     setSelectedValue(value);
     onChange(value); // Trigger parent handler
   };
+
+  placeholder = placeholder || t("placeholder")
 
   return (
     <select

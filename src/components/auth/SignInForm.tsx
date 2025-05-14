@@ -3,9 +3,9 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslations } from 'next-intl'
 
 export default function SignInForm() {
   const [username, setUsername] = useState<string>("");
@@ -14,26 +14,27 @@ export default function SignInForm() {
 
   const { login } = useAuth();
 
+  const t = useTranslations('guest')
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign In
+              {t('login_title')}
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign in!
+              {t('login_sub_title')}
             </p>
           </div>
           <div>
             <div className="space-y-6">
               <div>
                 <Label>
-                  Username <span className="text-error-500">*</span>
+                  {t('user_name')} <span className="text-error-500">*</span>
                 </Label>
                 <Input
-                  placeholder="Enter your name"
+                  placeholder={t('username_placeholder')}
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -41,12 +42,12 @@ export default function SignInForm() {
               </div>
               <div>
                 <Label>
-                  Password <span className="text-error-500">*</span>
+                  {t('password')}  <span className="text-error-500">*</span>
                 </Label>
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    placeholder={t('password_placeholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -62,35 +63,15 @@ export default function SignInForm() {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <Link
-                  href="/reset-password"
-                  className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Forgot password?
-                </Link>
-              </div>
               <div>
                 <Button
                   className="w-full"
                   size="sm"
                   onClick={() => login(username, password)}
                 >
-                  Sign in
+                  {t('login_btn')}
                 </Button>
               </div>
-            </div>
-
-            <div className="mt-5">
-              <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Don&apos;t have an account? {""}
-                <Link
-                  href="/signup"
-                  className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                >
-                  Sign Up
-                </Link>
-              </p>
             </div>
           </div>
         </div>

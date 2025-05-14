@@ -12,6 +12,7 @@ import {
   CreateConstantPayload,
   UpdateConstantPayload,
 } from "@/lib/types/constant";
+import { useTranslations } from "next-intl";
 
 export const useConstant = () => {
   const [constants, setConstants] = useState<Constant[]>([]);
@@ -24,15 +25,16 @@ export const useConstant = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeConstant(id)
       .then(() => {
         setConstants((prev) => prev.filter((constant) => constant.id !== id));
-        toast.success("Constant deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete constant");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -48,10 +50,10 @@ export const useConstant = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Constant updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update constant");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -68,12 +70,10 @@ export const useConstant = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Constant created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(
-          error.response?.data?.message || "Failed to create constant",
-        );
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

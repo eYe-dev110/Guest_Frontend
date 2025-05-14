@@ -19,8 +19,7 @@ import Label from "@/components/form/Label";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useConfirm } from "@/hooks/useConfirm";
 import Select from "@/components/form/Select";
-
-const headers = ["No", "Role", "Name", "Detail", "LastVisitAt", ""];
+import { useTranslations } from "next-intl";
 
 const roleOptions = [
   { value: "user", label: "user" },
@@ -29,9 +28,9 @@ const roleOptions = [
 ];
 
 export default function CustomerManagement() {
-  const [currentCustomerId, setCurrentCustomerId] = useState<number | null>(
-    null,
-  );
+  const t = useTranslations("CustomerManagement");
+
+  const [currentCustomerId, setCurrentCustomerId] = useState<number | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
 
   const [role, setRole] = useState<string>("");
@@ -79,28 +78,30 @@ export default function CustomerManagement() {
   };
 
   const handleClick = () => {
+    const payload = { role, name, detail_info: detailInfo };
     if (editMode) {
       if (!currentCustomerId) return;
-      handleEdit(currentCustomerId, {
-        role: role,
-        name,
-        detail_info: detailInfo,
-      });
+      handleEdit(currentCustomerId, payload);
     } else {
-      handleAdd({
-        role: role,
-        name,
-        detail_info: detailInfo,
-      });
+      handleAdd(payload);
     }
   };
 
+  const headers = [
+    t("table.no"),
+    t("table.role"),
+    t("table.name"),
+    t("table.detail"),
+    t("table.lastVisitAt"),
+    ""
+  ];
+
   return (
-    <ComponentCard title="Customer Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-2">
         <div className="col-span-1 flex flex-row gap-8 items-center">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -108,15 +109,15 @@ export default function CustomerManagement() {
         </div>
         <div className="flex flex-row-reverse">
           <Button variant="primary" size="sm" onClick={handleAddOpen}>
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => (
@@ -131,43 +132,33 @@ export default function CustomerManagement() {
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {customers.map((customer) => (
                   <TableRow key={customer.id}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       {customer.id}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {customer.role}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {customer.name}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {customer.detail_info}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {customer.last_seen_at}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <TableCell className="px-4 py-3">{customer.role}</TableCell>
+                    <TableCell className="px-4 py-3">{customer.name}</TableCell>
+                    <TableCell className="px-4 py-3">{customer.detail_info}</TableCell>
+                    <TableCell className="px-4 py-3">{customer.last_seen_at}</TableCell>
+                    <TableCell className="px-4 py-3">
                       <div className="flex flex-row gap-6">
                         <div
-                          className="w-fit h-fit cursor-pointer"
+                          className="cursor-pointer"
                           onClick={() => handleEditOpen(customer.id)}
                         >
                           <PencilIcon />
                         </div>
                         <div
-                          className="w-fit h-fit cursor-pointer"
-                          onClick={() => {
+                          className="cursor-pointer"
+                          onClick={() =>
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this user?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(customer.id),
-                            });
-                          }}
+                            })
+                          }
                         >
                           <TrashBinIcon />
                         </div>
@@ -180,48 +171,51 @@ export default function CustomerManagement() {
           </div>
         </div>
       </div>
+
       <div className="w-full flex flex-row-reverse">
         <Pagination
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
-          onPageChange={(page) => {
-            setPagination({ ...pagination, current_page: page });
-          }}
+          onPageChange={(page) =>
+            setPagination({ ...pagination, current_page: page })
+          }
         />
       </div>
+
       {ConfirmModal}
+
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
         className="max-w-[584px] p-5 lg:p-10"
       >
         <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          Edit Customer
+          {editMode ? t("edit") : t("add")}
         </h4>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
           <div className="col-span-2">
-            <Label>Role</Label>
+            <Label>{t("roleLabel")}</Label>
             <Select
               options={roleOptions}
               defaultValue={role}
-              onChange={(role) => setRole(role)}
+              onChange={(value) => setRole(value)}
             />
           </div>
           <div className="col-span-2">
-            <Label>Name</Label>
+            <Label>{t("nameLabel")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="col-span-2">
-            <Label>Detail</Label>
+            <Label>{t("detailLabel")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("detailPlaceholder")}
               value={detailInfo}
               onChange={(e) => setDetailInfo(e.target.value)}
             />
@@ -230,10 +224,10 @@ export default function CustomerManagement() {
 
         <div className="flex items-center justify-end w-full gap-3 mt-6">
           <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
-            Close
+            {t("close")}
           </Button>
           <Button size="sm" onClick={handleClick}>
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </Modal>

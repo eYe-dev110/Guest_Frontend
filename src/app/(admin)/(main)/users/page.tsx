@@ -21,10 +21,11 @@ import Switch from "@/components/form/switch/Switch";
 import dayjs from "dayjs";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useUser } from "@/hooks/useUser";
-
-const headers = ["No", "Name", "Role", "LastVisitAt", ""];
+import { useTranslations } from "next-intl";
 
 export default function UserManagement() {
+  const t = useTranslations("UserManagement");
+
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -65,7 +66,6 @@ export default function UserManagement() {
     if (user) {
       setRoleId(user.role.id);
       setUserName(user.user_name);
-      setRoleId(user.role.id);
       setIsActive(user.is_active);
     }
     setOpen(true);
@@ -78,32 +78,35 @@ export default function UserManagement() {
   };
 
   const handleClick = () => {
+    const payload = {
+      role_id: Number(roleId),
+      user_name: userName,
+      password,
+      passwordconf: passwordConf,
+      is_active: isActive,
+    };
     if (editMode) {
       if (!currentUserId) return;
-      handleEdit(currentUserId, {
-        role_id: Number(roleId),
-        user_name: userName,
-        password,
-        passwordconf: passwordConf,
-        is_active: isActive,
-      });
+      handleEdit(currentUserId, payload);
     } else {
-      handleAdd({
-        role_id: Number(roleId),
-        user_name: userName,
-        password,
-        passwordconf: passwordConf,
-        is_active: isActive,
-      });
+      handleAdd(payload);
     }
   };
 
+  const headers = [
+    t("table.no"),
+    t("table.name"),
+    t("table.role"),
+    t("table.lastVisitAt"),
+    "",
+  ];
+
   return (
-    <ComponentCard title="User Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-2">
         <div className="col-span-1 flex flex-row gap-8 items-center">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -111,7 +114,7 @@ export default function UserManagement() {
         </div>
         <div className="flex flex-row-reverse">
           <Button variant="primary" size="sm" onClick={handleAddOpen}>
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
@@ -119,7 +122,6 @@ export default function UserManagement() {
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => (
@@ -134,7 +136,6 @@ export default function UserManagement() {
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {users.map((user, index) => (
                   <TableRow key={user.id}>
@@ -162,9 +163,8 @@ export default function UserManagement() {
                           className="w-fit h-fit cursor-pointer"
                           onClick={() => {
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this user?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(user.id),
                             });
                           }}
@@ -184,9 +184,9 @@ export default function UserManagement() {
         <Pagination
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
-          onPageChange={(page) => {
-            setPagination({ ...pagination, current_page: page });
-          }}
+          onPageChange={(page) =>
+            setPagination({ ...pagination, current_page: page })
+          }
         />
       </div>
       {ConfirmModal}
@@ -196,58 +196,58 @@ export default function UserManagement() {
         className="max-w-[584px] p-5 lg:p-10"
       >
         <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          {editMode ? "Edit User" : "Create User"}
+          {editMode ? t("edit") : t("add")}
         </h4>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
           <div className="col-span-1">
-            <Label>Role</Label>
+            <Label>{t("role")}</Label>
             <Select
               defaultValue={roleId ?? ""}
-              onChange={(value) => setRoleId(value)}
+              onChange={setRoleId}
               options={[
-                { value: "1", label: "Admin" },
-                { value: "2", label: "User" },
+                { value: "1", label: t("roles.admin") },
+                { value: "2", label: t("roles.user") },
               ]}
-              placeholder="Select Role"
+              placeholder={t("selectRole")}
             />
           </div>
           <div className="col-span-1">
-            <Label>Active</Label>
+            <Label>{t("active")}</Label>
             <div className="flex items-center w-full flex-1">
               <Switch
                 label=""
                 checked={isActive}
-                onChange={(checked) => setIsActive(checked)}
+                onChange={setIsActive}
               />
             </div>
           </div>
 
           <div className="col-span-2">
-            <Label>Username</Label>
+            <Label>{t("username")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("usernamePlaceholder")}
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
             />
           </div>
 
           <div className="col-span-2">
-            <Label>Password</Label>
+            <Label>{t("password")}</Label>
             <Input
               type="password"
-              placeholder="Enter your password"
+              placeholder={t("passwordPlaceholder")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <div className="col-span-1 sm:col-span-2">
-            <Label>Confirm Password</Label>
+          <div className="col-span-2">
+            <Label>{t("confirmPassword")}</Label>
             <Input
               type="password"
-              placeholder="Enter your password"
+              placeholder={t("passwordPlaceholder")}
               value={passwordConf}
               onChange={(e) => setPasswordConf(e.target.value)}
             />
@@ -256,10 +256,10 @@ export default function UserManagement() {
 
         <div className="flex items-center justify-end w-full gap-3 mt-6">
           <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
-            Close
+            {t("close")}
           </Button>
           <Button size="sm" onClick={handleClick}>
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </Modal>

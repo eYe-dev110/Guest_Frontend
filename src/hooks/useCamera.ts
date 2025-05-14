@@ -9,6 +9,7 @@ import { Camera } from "@/lib/types/camera";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateCameraPayload, UpdateCameraPayload } from "@/lib/types/camera";
+import { useTranslations } from "next-intl";
 
 export const useCamera = () => {
   const [cameras, setCameras] = useState<Camera[]>([]);
@@ -22,6 +23,7 @@ export const useCamera = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeCamera(id)
@@ -29,10 +31,10 @@ export const useCamera = () => {
         setCameras((prevCameras) =>
           prevCameras.filter((camera) => camera.id !== id),
         );
-        toast.success("Camera deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete camera");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -48,10 +50,10 @@ export const useCamera = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Camera updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update camera");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -68,10 +70,10 @@ export const useCamera = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Camera created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(error.response?.data?.message || "Failed to create camera");
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

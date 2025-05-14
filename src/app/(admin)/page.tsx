@@ -13,6 +13,7 @@ import { RoleName } from "@/lib/types/role";
 import DatePicker from "@/components/form/date-picker";
 import ComponentCard from "@/components/common/ComponentCard";
 import dayjs from "dayjs";
+import { useTranslations } from "next-intl";
 
 const roles: RoleName[] = ["client", "user", "employeer"];
 
@@ -27,6 +28,8 @@ export default function Dashboard() {
   >([]);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+
+  const t = useTranslations("dashboard")
 
   useEffect(() => {
     fetchCustomerCountOfTodayByRole().then((res) => {
@@ -60,7 +63,7 @@ export default function Dashboard() {
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-6">
         <CustomerMetrics
-          title="Today Analysis"
+          title={t("today_analysis")}
           key={"today"}
           metrics={statsByToday}
           className="col-span-4"
@@ -68,14 +71,14 @@ export default function Dashboard() {
       </div>
       <div className="col-span-6">
         <CustomerMetrics
-          title="Month Analysis"
+          title={t("month_analysis")}
           key={"Month"}
           metrics={statsByMonth}
           className="col-span-4"
         />
       </div>
       <div className="col-span-12 flex flex-col">
-        <ComponentCard title="Customer Metrics">
+        <ComponentCard title={t("customer_metrics")}>
           <div className="flex gap-4 flex-row">
             <DatePicker
               id="start_date"
@@ -102,7 +105,7 @@ export default function Dashboard() {
               dayjs(item.date).format("DD"),
             )}
             data={roles.map((role) => ({
-              name: role,
+              name: t(`${role}`) as RoleName,
               data: statsByDaily.map(
                 (dailyItem) =>
                   dailyItem.counts.find((countItem) => countItem.role === role)

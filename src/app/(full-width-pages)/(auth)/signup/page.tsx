@@ -1,11 +1,16 @@
 import SignUpForm from "@/components/auth/SignUpForm";
 import { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Next.js SignUp Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js SignUp Page TailAdmin Dashboard Template",
-  // other metadata
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("guest");
+
+  return {
+    title: t('logo'),
+    description: t('sub_logo'),
+    // other metadata...
+  };
+}
 
 export default function SignUp() {
   return <SignUpForm />;

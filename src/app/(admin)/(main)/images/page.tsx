@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Pagination from "@/components/tables/Pagination";
 import ComponentCard from "@/components/common/ComponentCard";
 import { PencilIcon, TrashBinIcon } from "@/icons";
@@ -24,18 +23,11 @@ import Select from "@/components/form/Select";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useHistory } from "@/hooks/useHistory";
 import Checkbox from "@/components/form/input/Checkbox";
-
-const headers = [
-  "No",
-  "Customer",
-  "Camera",
-  "History",
-  "ImageType",
-  "Image",
-  "",
-];
+import { useTranslations } from "next-intl";
 
 export default function ImageManagement() {
+  const t = useTranslations("ImageManagement");
+
   const [currentImageId, setCurrentImageId] = useState<number | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
 
@@ -84,9 +76,9 @@ export default function ImageManagement() {
     setCurrentImageId(id);
     const image = images.find((image) => image.id === id);
     if (image) {
-      setCustomerId(image.customer ? image.customer.id.toString() : "");
-      setCameraId(image.camera ? image.camera.id.toString() : "");
-      setHistoryId(image.history?.id?.toString() || "");
+      setCustomerId(image.customer?.id?.toString() ?? "");
+      setCameraId(image.camera?.id?.toString() ?? "");
+      setHistoryId(image.history?.id?.toString() ?? "");
       setImageType(image.image_type);
       setUrl(image.url);
     }
@@ -100,34 +92,39 @@ export default function ImageManagement() {
   };
 
   const handleClick = () => {
+    const payload = {
+      customer_id: customerId ? Number(customerId) : undefined,
+      camera_id: cameraId ? Number(cameraId) : undefined,
+      history_id: historyId ? Number(historyId) : undefined,
+      image_type: imageType,
+      url,
+    };
     if (editMode) {
       if (!currentImageId) return;
-      handleEdit(currentImageId, {
-        customer_id: customerId ? Number(customerId) : undefined,
-        camera_id: cameraId ? Number(cameraId) : undefined,
-        history_id: historyId ? Number(historyId) : undefined,
-        image_type: imageType,
-        url: url,
-      });
+      handleEdit(currentImageId, payload);
     } else {
-      handleAdd({
-        customer_id: customerId ? Number(customerId) : undefined,
-        camera_id: cameraId ? Number(cameraId) : undefined,
-        history_id: historyId ? Number(historyId) : undefined,
-        image_type: imageType,
-        url,
-      });
+      handleAdd(payload);
     }
   };
 
   useEffect(() => setSelectedIds([]), [multiSelect]);
 
+  const headers = [
+    t("table.no"),
+    t("table.image"),
+    t("table.customer"),
+    t("table.camera"),
+    t("table.history"),
+    t("table.imageType"),
+    "",
+  ];
+
   return (
-    <ComponentCard title="Image Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-3">
         <div className="col-span-1 flex flex-row gap-8 items-center">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -138,9 +135,9 @@ export default function ImageManagement() {
           <Button
             variant="primary"
             size="sm"
-            onClick={() => setMultiSelect((prevState) => !prevState)}
+            onClick={() => setMultiSelect((prev) => !prev)}
           >
-            {multiSelect ? "Deselect" : "Select"}
+            {multiSelect ? t("deselect") : t("select")}
           </Button>
           <Button
             variant="primary"
@@ -148,36 +145,32 @@ export default function ImageManagement() {
             onClick={() => handleMultiRemove(selecetedIds)}
             disabled={selecetedIds.length === 0}
           >
-            Delete
+            {t("delete")}
           </Button>
           <Button variant="primary" size="sm" onClick={handleAddOpen} disabled>
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
-                  {headers.map((header, index) => {
-                    if (!multiSelect && header == "Selected") return;
-                    return (
-                      <TableCell
-                        key={index}
-                        isHeader
-                        className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                      >
-                        {header}
-                      </TableCell>
-                    );
-                  })}
+                  {headers.map((header, index) => (
+                    <TableCell
+                      key={index}
+                      isHeader
+                      className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                    >
+                      {header}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {images.map((image, index) => (
                   <TableRow key={image.id}>
@@ -185,20 +178,20 @@ export default function ImageManagement() {
                       <TableCell className="px-5 py-4 sm:px-6 text-start">
                         <Checkbox
                           checked={selecetedIds.includes(image.id)}
-                          onChange={() => {
-                            if (selecetedIds.includes(image.id))
-                              setSelectedIds([
-                                ...selecetedIds.filter((id) => id != image.id),
-                              ]);
-                            else setSelectedIds([...selecetedIds, image.id]);
-                          }}
+                          onChange={() =>
+                            setSelectedIds((prev) =>
+                              prev.includes(image.id)
+                                ? prev.filter((id) => id !== image.id)
+                                : [...prev, image.id]
+                            )
+                          }
                         />
                       </TableCell>
                     )}
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
                       {index + 1}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <TableCell className="px-4 py-3">
                       <div
                         className="cursor-pointer w-fit h-fit"
                         onDoubleClick={() => {
@@ -215,39 +208,31 @@ export default function ImageManagement() {
                         />
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {image.customer ? image.customer.name : ""}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <TableCell>{image.customer?.name ?? ""}</TableCell>
+                    <TableCell>
                       {image.camera
-                        ? image.camera.title + "" + image.camera.sub_title
+                        ? image.camera.title + image.camera.sub_title
                         : ""}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {image.history ? image.history.id : ""}
-                    </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {image.image_type}
-                    </TableCell>
-
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    <TableCell>{image.history?.id ?? ""}</TableCell>
+                    <TableCell>{image.image_type}</TableCell>
+                    <TableCell>
                       <div className="flex flex-row gap-6">
                         <div
-                          className="w-fit h-fit cursor-pointer"
+                          className="cursor-pointer"
                           onClick={() => handleEditOpen(image.id)}
                         >
                           <PencilIcon />
                         </div>
                         <div
-                          className="w-fit h-fit cursor-pointer"
-                          onClick={() => {
+                          className="cursor-pointer"
+                          onClick={() =>
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this image?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(image.id),
-                            });
-                          }}
+                            })
+                          }
                         >
                           <TrashBinIcon />
                         </div>
@@ -260,102 +245,90 @@ export default function ImageManagement() {
           </div>
         </div>
       </div>
+
       <div className="w-full flex flex-row-reverse">
         <Pagination
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
-          onPageChange={(page) => {
-            setPagination({ ...pagination, current_page: page });
-          }}
+          onPageChange={(page) =>
+            setPagination({ ...pagination, current_page: page })
+          }
         />
       </div>
-      {ConfirmModal}
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        className="max-w-[584px] p-5 lg:p-10"
-      >
-        <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          {editMode ? "Edit Image" : "Add Image"}
-        </h4>
 
-        <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+      {ConfirmModal}
+
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <h4 className="mb-6 text-lg font-medium">{editMode ? t("edit") : t("add")}</h4>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div className="col-span-2">
-            <Label>Customer</Label>
+            <Label>{t("customer")}</Label>
             <Select
-              placeholder="Select Customer"
-              options={customers.map((customer) => ({
-                value: customer.id.toString(),
-                label: customer.name,
+              placeholder={t("selectCustomer")}
+              options={customers.map((c) => ({
+                value: c.id.toString(),
+                label: c.name,
               }))}
               defaultValue={customerId}
-              onChange={(value) => setCustomerId(value)}
+              onChange={setCustomerId}
             />
           </div>
           <div className="col-span-2">
-            <Label>Camera</Label>
+            <Label>{t("camera")}</Label>
             <Select
-              placeholder="Select Camera"
-              options={cameras.map((camera) => ({
-                value: camera.id.toString(),
-                label: camera.title + camera.sub_title,
+              placeholder={t("selectCamera")}
+              options={cameras.map((c) => ({
+                value: c.id.toString(),
+                label: c.title + c.sub_title,
               }))}
-              defaultValue={customerId}
-              onChange={(value) => setCustomerId(value)}
+              defaultValue={cameraId}
+              onChange={setCameraId}
             />
           </div>
           <div className="col-span-2">
-            <Label>History</Label>
+            <Label>{t("history")}</Label>
             <Select
-              placeholder="Select History"
-              options={histories.map((history) => ({
-                value: history.id.toString(),
-                label: history.id.toString(),
+              placeholder={t("selectHistory")}
+              options={histories.map((h) => ({
+                value: h.id.toString(),
+                label: h.id.toString(),
               }))}
-              defaultValue={customerId}
-              onChange={(value) => setHistoryId(value)}
+              defaultValue={historyId}
+              onChange={setHistoryId}
             />
           </div>
           <div className="col-span-2">
-            <Label>ImageType</Label>
+            <Label>{t("imageType")}</Label>
             <Select
-              placeholder="Select Image Type"
+              placeholder={t("selectImageType")}
               options={[
                 { value: "camera", label: "camera" },
                 { value: "face", label: "face" },
               ]}
-              defaultValue={customerId}
-              onChange={(value) => setCustomerId(value)}
+              defaultValue={imageType ?? ""}
+              onChange={(value) => setImageType(value as "camera" | "face")}
             />
           </div>
           <div className="col-span-2">
-            <Label>ImageUrl</Label>
+            <Label>{t("imageUrl")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("imageUrlPlaceholder")}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
           </div>
         </div>
-
         <div className="flex items-center justify-end w-full gap-3 mt-6">
-          <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
-            Close
+          <Button variant="outline" onClick={() => setOpen(false)}>
+            {t("close")}
           </Button>
-          <Button size="sm" onClick={handleClick}>
-            Save Changes
-          </Button>
+          <Button onClick={handleClick}>{t("saveChanges")}</Button>
         </div>
       </Modal>
-      <Modal
-        isOpen={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        className="max-w-[584px] p-5 lg:p-10"
-      >
-        <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          Preview
-        </h4>
+
+      <Modal isOpen={previewOpen} onClose={() => setPreviewOpen(false)}>
+        <h4 className="mb-6 text-lg font-medium">{t("preview")}</h4>
         <Image
           alt="preview"
           src={previewUrl}

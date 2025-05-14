@@ -18,15 +18,13 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useConstant } from "@/hooks/useConstant";
-
-const headers = ["No", "Name", "Value", ""];
+import { useTranslations } from "next-intl";
 
 export default function ConstantManagement() {
-  const [currentConstantId, setCurrentConstantId] = useState<number | null>(
-    null,
-  );
-  const [editMode, setEditMode] = useState<boolean>(false);
+  const t = useTranslations("ConstantManagement");
 
+  const [currentConstantId, setCurrentConstantId] = useState<number | null>(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [value, setValue] = useState<string>("");
 
@@ -69,26 +67,28 @@ export default function ConstantManagement() {
   };
 
   const handleClick = () => {
+    const payload = { name, value };
     if (editMode) {
       if (!currentConstantId) return;
-      handleEdit(currentConstantId, {
-        name,
-        value,
-      });
+      handleEdit(currentConstantId, payload);
     } else {
-      handleAdd({
-        name,
-        value,
-      });
+      handleAdd(payload);
     }
   };
 
+  const headers = [
+    t("table.no"),
+    t("table.name"),
+    t("table.value"),
+    ""
+  ];
+
   return (
-    <ComponentCard title="Constant Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-2">
         <div className="col-span-1 flex flex-row gap-8 items-center">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -96,7 +96,7 @@ export default function ConstantManagement() {
         </div>
         <div className="flex flex-row-reverse">
           <Button variant="primary" size="sm" onClick={handleAddOpen}>
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
@@ -104,7 +104,6 @@ export default function ConstantManagement() {
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => (
@@ -119,7 +118,6 @@ export default function ConstantManagement() {
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {constants.map((constant) => (
                   <TableRow key={constant.id}>
@@ -142,14 +140,13 @@ export default function ConstantManagement() {
                         </div>
                         <div
                           className="w-fit h-fit cursor-pointer"
-                          onClick={() => {
+                          onClick={() =>
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this user?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(constant.id),
-                            });
-                          }}
+                            })
+                          }
                         >
                           <TrashBinIcon />
                         </div>
@@ -166,9 +163,9 @@ export default function ConstantManagement() {
         <Pagination
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
-          onPageChange={(page) => {
-            setPagination({ ...pagination, current_page: page });
-          }}
+          onPageChange={(page) =>
+            setPagination({ ...pagination, current_page: page })
+          }
         />
       </div>
       {ConfirmModal}
@@ -178,24 +175,24 @@ export default function ConstantManagement() {
         className="max-w-[584px] p-5 lg:p-10"
       >
         <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          {editMode ? "Edit Constant" : "Add Constant"}
+          {editMode ? t("edit") : t("add")}
         </h4>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
           <div className="col-span-2">
-            <Label>Name</Label>
+            <Label>{t("name")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="col-span-2">
-            <Label>Value</Label>
+            <Label>{t("value")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("valuePlaceholder")}
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
@@ -204,10 +201,10 @@ export default function ConstantManagement() {
 
         <div className="flex items-center justify-end w-full gap-3 mt-6">
           <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
-            Close
+            {t("close")}
           </Button>
           <Button size="sm" onClick={handleClick}>
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </Modal>

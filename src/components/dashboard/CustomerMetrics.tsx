@@ -3,6 +3,7 @@
 import React from "react";
 import { GroupIcon } from "@/icons";
 import { CustomerStatistic } from "@/lib/types/customerStatistic";
+import { useTranslations } from "next-intl";
 
 interface CustomerMetricsProps {
   title: string;
@@ -14,6 +15,7 @@ export const CustomerMetrics: React.FC<CustomerMetricsProps> = ({
   metrics,
   className,
 }) => {
+  const t = useTranslations("dashboard")
   return (
     <div className={className}>
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
@@ -26,7 +28,7 @@ export const CustomerMetrics: React.FC<CustomerMetricsProps> = ({
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {"user"}
+              {t("user")}
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {metrics.find((metric) => metric.role == "user")
@@ -36,7 +38,7 @@ export const CustomerMetrics: React.FC<CustomerMetricsProps> = ({
           </div>
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {"client"}
+              {t("client")}
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {metrics.find((metric) => metric.role == "client")
@@ -46,7 +48,7 @@ export const CustomerMetrics: React.FC<CustomerMetricsProps> = ({
           </div>
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {"employeer"}
+              {t("employeer")}
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {metrics.find((metric) => metric.role == "employeer")

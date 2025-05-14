@@ -19,10 +19,11 @@ import Input from "@/components/form/input/InputField";
 import DatePicker from "@/components/form/date-picker";
 import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
-
-const headers = ["Selected", "No", "CustomerId", "CameraId", "SeenAt", ""];
+import { useTranslations } from "next-intl";
 
 export default function HistoryManagement() {
+  const t = useTranslations("HistoryManagement");
+
   const { showConfirm, ConfirmModal } = useConfirm();
   const [multiSelect, setMultiSelect] = useState<boolean>(false);
   const [selecetedIds, setSelectedIds] = useState<number[]>([]);
@@ -41,12 +42,21 @@ export default function HistoryManagement() {
 
   useEffect(() => setSelectedIds([]), [multiSelect]);
 
+  const headers = [
+    t("table.selected"),
+    t("table.no"),
+    t("table.customerId"),
+    t("table.cameraId"),
+    t("table.seenAt"),
+    "", // For actions (trash icon)
+  ];
+
   return (
-    <ComponentCard title="History Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-4 gap-4">
         <div className="col-span-1">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -55,7 +65,7 @@ export default function HistoryManagement() {
         <div className="col-span-1">
           <DatePicker
             id="start_date"
-            placeholder="Start Date"
+            placeholder={t("startDate")}
             mode="single"
             onChange={(_, currentDateString) => {
               setStartDate(currentDateString);
@@ -65,7 +75,7 @@ export default function HistoryManagement() {
         <div className="col-span-1">
           <DatePicker
             id="end_date"
-            placeholder="End Date"
+            placeholder={t("endDate")}
             mode="single"
             onChange={(_, currentDateString) => {
               setEndDate(currentDateString);
@@ -78,7 +88,7 @@ export default function HistoryManagement() {
             size="sm"
             onClick={() => setMultiSelect((prevState) => !prevState)}
           >
-            {multiSelect ? "Deselect" : "Select"}
+            {multiSelect ? t("deselect") : t("select")}
           </Button>
           <Button
             variant="primary"
@@ -86,7 +96,7 @@ export default function HistoryManagement() {
             onClick={() => handleMuitiRemove(selecetedIds)}
             disabled={selecetedIds.length === 0}
           >
-            Delete
+            {t("delete")}
           </Button>
         </div>
       </div>
@@ -94,11 +104,10 @@ export default function HistoryManagement() {
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => {
-                    if (!multiSelect && header == "Selected") return;
+                    if (!multiSelect && index === 0) return null;
                     return (
                       <TableCell
                         key={index}
@@ -111,8 +120,6 @@ export default function HistoryManagement() {
                   })}
                 </TableRow>
               </TableHeader>
-
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {histories.map((history) => (
                   <TableRow key={history.id}>
@@ -123,9 +130,7 @@ export default function HistoryManagement() {
                           onChange={() => {
                             if (selecetedIds.includes(history.id))
                               setSelectedIds([
-                                ...selecetedIds.filter(
-                                  (id) => id != history.id,
-                                ),
+                                ...selecetedIds.filter((id) => id !== history.id),
                               ]);
                             else setSelectedIds([...selecetedIds, history.id]);
                           }}
@@ -149,9 +154,8 @@ export default function HistoryManagement() {
                         className="w-fit h-fit cursor-pointer"
                         onClick={() => {
                           showConfirm({
-                            title:
-                              "Are you sure you want to delete this history?",
-                            positiveText: "Delete",
+                            title: t("deleteConfirm"),
+                            positiveText: t("delete"),
                             positiveAction: () => handleRemove(history.id),
                           });
                         }}

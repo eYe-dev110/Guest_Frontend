@@ -2,14 +2,18 @@ import GridShape from "@/components/common/GridShape";
 import ThemeTogglerTwo from "@/components/common/ThemeTogglerTwo";
 
 import { ThemeProvider } from "@/context/ThemeContext";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React from "react";
+
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations('guest')
+
   return (
     <div className="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
       <ThemeProvider>
@@ -28,10 +32,10 @@ export default function AuthLayout({
                     alt="Logo"
                     className="w-12 h-12"
                   />
-                  <span className="text-[30px] text-white">Guest Counting</span>
+                  <span className="text-[30px] text-white">{t('logo')}</span>
                 </div>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Guest Counting System
+                  {t('sub_logo')}
                 </p>
               </div>
             </div>

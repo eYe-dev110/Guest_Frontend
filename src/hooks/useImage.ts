@@ -10,6 +10,7 @@ import { ImageType } from "@/lib/types/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateImagePayload, UpdateImagePayload } from "@/lib/types/image";
+import { useTranslations } from "next-intl";
 
 export const useImage = () => {
   const [images, setImages] = useState<ImageType[]>([]);
@@ -23,6 +24,7 @@ export const useImage = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeImage(id)
@@ -30,10 +32,10 @@ export const useImage = () => {
         setImages((prevImages) =>
           prevImages.filter((image) => image.id !== id),
         );
-        toast.success("Image deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete image");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -43,10 +45,10 @@ export const useImage = () => {
         setImages((prevImages) =>
           prevImages.filter((image) => !ids.includes(image.id)),
         );
-        toast.success("Images deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete images");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -62,10 +64,10 @@ export const useImage = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Image updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update image");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -82,10 +84,10 @@ export const useImage = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Image created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(error.response?.data?.message || "Failed to create image");
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslations } from "next-intl";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,6 +24,8 @@ export default function UserDropdown() {
     const storedUsername = localStorage.getItem("username");
     if (storedUsername) setUsername(storedUsername);
   }, []);
+
+  const t = useTranslations("guest")
 
   return (
     <div className="relative">
@@ -85,7 +88,7 @@ export default function UserDropdown() {
               fill=""
             />
           </svg>
-          Sign out
+          {t("sign_out")}
         </div>
       </Dropdown>
     </div>

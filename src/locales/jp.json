@@ -1,0 +1,242 @@
+{
+  "guest": {
+    "sign_out": "サインアウト",
+    "login_success": "ログイン成功！",
+    "login_failed": "ログイン失敗",
+    "logo": "ゲストカウント",
+    "sub_logo": "ゲストカウントシステム",
+    "login_title": "ログイン",
+    "login_sub_title": "ユーザー名とパスワードを入力してください！",
+    "login_btn": "ログイン",
+    "user_name": "ユーザー名",
+    "password": "パスワード",
+    "username_placeholder": "お名前を入力してください",
+    "password_placeholder": "パスワードを入力してください",
+    "page_previous": "前へ",
+    "page_next": "次へ"
+  },
+  "dialog": {
+    "confirm": "確認",
+    "cancel": "キャンセル"
+  },
+  "select": {
+    "placeholder": "オプションを選択してください"
+  },
+  "dashboard": {
+    "logo": "ダッシュボード",
+    "today_analysis": "本日の分析",
+    "user": "ユーザー",
+    "client": "クライアント",
+    "employeer": "従業員",
+    "month_analysis": "今月の分析",
+    "customer_metrics": "顧客指標"
+  },
+  "toast": {
+    "login_success": "ログインに成功しました！",
+    "login_failed": "ログインに失敗しました",
+    "success": "操作が成功しました！",
+    "fail": "操作に失敗しました"
+  },
+  "user": {
+    "user_management": "ユーザー管理",
+    "no": "番号",
+    "name": "名前",
+    "role": "役割",
+    "last_visit_at": "最終訪問日"
+  },
+  "Sidebar": {
+    "logo": "ゲストカウント",
+    "menu": "メニュー",
+    "dashboard": "ダッシュボード",
+    "users": "ユーザー管理",
+    "roles": "役割管理",
+    "sessions": "セッション管理",
+    "customers": "顧客管理",
+    "history": "履歴",
+    "cameras": "カメラ管理",
+    "images": "画像管理",
+    "constants": "定数管理"
+  },
+  "HistoryManagement": {
+    "title": "履歴管理",
+    "searchPlaceholder": "検索...",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "select": "選択",
+    "deselect": "選択解除",
+    "delete": "削除",
+    "deleteConfirm": "この履歴を削除してもよろしいですか？",
+    "table": {
+      "selected": "選択済み",
+      "no": "番号",
+      "customerId": "顧客ID",
+      "cameraId": "カメラ",
+      "seenAt": "確認日時"
+    }
+  },
+  "ImageManagement": {
+    "title": "画像管理",
+    "searchPlaceholder": "検索...",
+    "select": "選択",
+    "deselect": "選択解除",
+    "delete": "削除",
+    "create": "作成",
+    "edit": "画像を編集",
+    "add": "画像を追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "preview": "プレビュー",
+    "deleteConfirm": "この画像を削除してもよろしいですか？",
+    "customer": "顧客",
+    "camera": "カメラ",
+    "history": "履歴",
+    "imageType": "画像タイプ",
+    "imageUrl": "画像URL",
+    "imageUrlPlaceholder": "画像URLを入力",
+    "selectCustomer": "顧客を選択",
+    "selectCamera": "カメラを選択",
+    "selectHistory": "履歴を選択",
+    "selectImageType": "画像タイプを選択",
+    "table": {
+      "no": "番号",
+      "image": "画像",
+      "customer": "顧客",
+      "camera": "カメラ",
+      "history": "履歴",
+      "imageType": "画像タイプ"
+    }
+  },
+  "ConstantManagement": {
+    "title": "定数管理",
+    "searchPlaceholder": "検索...",
+    "create": "作成",
+    "edit": "定数を編集",
+    "add": "定数を追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "delete": "削除",
+    "deleteConfirm": "この定数を削除してもよろしいですか？",
+    "name": "名前",
+    "value": "値",
+    "namePlaceholder": "名前を入力",
+    "valuePlaceholder": "値を入力",
+    "table": {
+      "no": "番号",
+      "name": "名前",
+      "value": "値"
+    }
+  },
+  "SessionManagement": {
+    "title": "セッション管理",
+    "searchPlaceholder": "検索...",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "select": "選択",
+    "deselect": "選択解除",
+    "delete": "削除",
+    "deleteConfirm": "このセッションを削除してもよろしいですか？",
+    "table": {
+      "selected": "選択済み",
+      "no": "番号",
+      "customerName": "顧客名",
+      "name": "セッション",
+      "updatedAt": "日付"
+    }
+  },
+  "UserManagement": {
+    "title": "ユーザー管理",
+    "searchPlaceholder": "検索...",
+    "create": "作成",
+    "edit": "ユーザーを編集",
+    "add": "ユーザーを追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "delete": "削除",
+    "deleteConfirm": "このユーザーを削除してもよろしいですか？",
+    "username": "ユーザー名",
+    "usernamePlaceholder": "ユーザー名を入力",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワードを入力",
+    "confirmPassword": "パスワード確認",
+    "role": "役割",
+    "selectRole": "役割を選択",
+    "active": "有効",
+    "roles": {
+      "admin": "管理者",
+      "user": "ユーザー"
+    },
+    "table": {
+      "no": "番号",
+      "name": "ユーザー名",
+      "role": "役割",
+      "lastVisitAt": "最終訪問"
+    }
+  },
+  "RoleManagement": {
+    "title": "役割管理",
+    "searchPlaceholder": "検索...",
+    "create": "作成",
+    "edit": "役割を編集",
+    "add": "役割を追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "delete": "削除",
+    "deleteConfirm": "この役割を削除してもよろしいですか？",
+    "name": "名前",
+    "namePlaceholder": "役割名を入力",
+    "table": {
+      "no": "番号",
+      "name": "名前",
+      "updatedAt": "更新日"
+    }
+  },
+  "CameraManagement": {
+    "title": "カメラ管理",
+    "searchPlaceholder": "検索...",
+    "create": "作成",
+    "edit": "カメラを編集",
+    "add": "カメラを追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "delete": "削除",
+    "deleteConfirm": "このカメラを削除してもよろしいですか？",
+    "titleLabel": "タイトル",
+    "titlePlaceholder": "カメラのタイトルを入力",
+    "subTitleLabel": "サブタイトル",
+    "subTitlePlaceholder": "カメラのサブタイトルを入力",
+    "floorNumLabel": "階数",
+    "floorNumPlaceholder": "階数を入力",
+    "floorSubNumLabel": "副階数",
+    "floorSubNumPlaceholder": "副階数を入力",
+    "table": {
+      "no": "番号",
+      "title": "タイトル",
+      "subTitle": "サブタイトル",
+      "floorNum": "階数",
+      "floorSubNum": "副階数"
+    }
+  },
+  "CustomerManagement": {
+    "title": "顧客管理",
+    "searchPlaceholder": "検索...",
+    "create": "作成",
+    "edit": "顧客を編集",
+    "add": "顧客を追加",
+    "close": "閉じる",
+    "saveChanges": "変更を保存",
+    "delete": "削除",
+    "deleteConfirm": "このユーザーを削除してもよろしいですか？",
+    "roleLabel": "役割",
+    "nameLabel": "名前",
+    "detailLabel": "詳細",
+    "namePlaceholder": "顧客名を入力",
+    "detailPlaceholder": "詳細を入力",
+    "table": {
+      "no": "番号",
+      "role": "役割",
+      "name": "名前",
+      "detail": "詳細",
+      "lastVisitAt": "最終訪問"
+    }
+  }
+}

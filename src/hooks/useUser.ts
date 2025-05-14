@@ -9,6 +9,7 @@ import { User } from "@/lib/types/user";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateUserPayload, UpdateUserPayload } from "@/lib/types/user";
+import { useTranslations } from "next-intl";
 
 export const useUser = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -21,15 +22,16 @@ export const useUser = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeUser(id)
       .then(() => {
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-        toast.success("User deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete user");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -45,10 +47,10 @@ export const useUser = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("User updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update user");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -65,10 +67,10 @@ export const useUser = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("User created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(error.response.data.message || "Failed to create user");
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

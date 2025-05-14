@@ -12,6 +12,7 @@ import {
   CreateCustomerPayload,
   UpdateCustomerPayload,
 } from "@/lib/types/customer";
+import { useTranslations } from "next-intl";
 
 export const useCustomer = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -25,6 +26,7 @@ export const useCustomer = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeCustomer(id)
@@ -49,10 +51,10 @@ export const useCustomer = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Customer updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update customer");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -69,12 +71,10 @@ export const useCustomer = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Customer created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(
-          error.response?.data?.message || "Failed to create customer",
-        );
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

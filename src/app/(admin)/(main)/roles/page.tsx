@@ -20,13 +20,13 @@ import dayjs from "dayjs";
 import { useRole } from "@/hooks/useRole";
 import { useConfirm } from "@/hooks/useConfirm";
 import { RoleName } from "@/lib/types/role";
-
-const headers = ["No", "Name", "UpdatedAt", ""];
+import { useTranslations } from "next-intl";
 
 export default function RoleManagement() {
+  const t = useTranslations("RoleManagement");
+
   const [currentRoleId, setCurrentRoleId] = useState<number | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
-
   const [name, setName] = useState<RoleName>("user");
 
   const { showConfirm, ConfirmModal } = useConfirm();
@@ -43,9 +43,7 @@ export default function RoleManagement() {
     handleAdd,
   } = useRole();
 
-  const reset = () => {
-    setName("user");
-  };
+  const reset = () => setName("user");
 
   const handleEditOpen = (id: number) => {
     reset();
@@ -65,24 +63,28 @@ export default function RoleManagement() {
   };
 
   const handleClick = () => {
+    const payload = { name };
     if (editMode) {
       if (!currentRoleId) return;
-      handleEdit(currentRoleId, {
-        name,
-      });
+      handleEdit(currentRoleId, payload);
     } else {
-      handleAdd({
-        name,
-      });
+      handleAdd(payload);
     }
   };
 
+  const headers = [
+    t("table.no"),
+    t("table.name"),
+    t("table.updatedAt"),
+    ""
+  ];
+
   return (
-    <ComponentCard title="Role Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-2">
         <div className="col-span-1 flex flex-row gap-8 items-center">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -90,15 +92,15 @@ export default function RoleManagement() {
         </div>
         <div className="flex flex-row-reverse">
           <Button variant="primary" size="sm" onClick={handleAddOpen}>
-            Create
+            {t("create")}
           </Button>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => (
@@ -113,7 +115,6 @@ export default function RoleManagement() {
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {roles.map((role) => (
                   <TableRow key={role.id}>
@@ -136,14 +137,13 @@ export default function RoleManagement() {
                         </div>
                         <div
                           className="w-fit h-fit cursor-pointer"
-                          onClick={() => {
+                          onClick={() =>
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this role?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(role.id),
-                            });
-                          }}
+                            })
+                          }
                         >
                           <TrashBinIcon />
                         </div>
@@ -156,31 +156,34 @@ export default function RoleManagement() {
           </div>
         </div>
       </div>
+
       <div className="w-full flex flex-row-reverse">
         <Pagination
           currentPage={pagination.current_page}
           totalPages={pagination.total_pages}
-          onPageChange={(page) => {
-            setPagination({ ...pagination, current_page: page });
-          }}
+          onPageChange={(page) =>
+            setPagination({ ...pagination, current_page: page })
+          }
         />
       </div>
+
       {ConfirmModal}
+
       <Modal
         isOpen={open}
         onClose={() => setOpen(false)}
         className="max-w-[584px] p-5 lg:p-10"
       >
         <h4 className="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
-          {editMode ? "Edit Role" : "Add Role"}
+          {editMode ? t("edit") : t("add")}
         </h4>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
           <div className="col-span-2">
-            <Label>Name</Label>
+            <Label>{t("name")}</Label>
             <Input
               type="text"
-              placeholder="Enter your username"
+              placeholder={t("namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value as RoleName)}
             />
@@ -189,10 +192,10 @@ export default function RoleManagement() {
 
         <div className="flex items-center justify-end w-full gap-3 mt-6">
           <Button size="sm" variant="outline" onClick={() => setOpen(false)}>
-            Close
+            {t("close")}
           </Button>
           <Button size="sm" onClick={handleClick}>
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </div>
       </Modal>

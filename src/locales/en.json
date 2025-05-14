@@ -1,0 +1,240 @@
+{
+  "guest": {
+    "sign_out": "Sign out",
+    "logo": "Guest Counting",
+    "sub_logo": "Guest Counting System",
+    "login_title": "Sign In",
+    "login_sub_title": "Enter your username and password to sign in!",
+    "login_btn": "Sign in",
+    "user_name": "Username",
+    "password": "Password",
+    "username_placeholder": "Enter your name",
+    "password_placeholder": "Enter your password",
+    "page_previous": "Previous",
+    "page_next": "Next"
+  },
+  "toast": {
+    "login_success": "Login successful!",
+    "login_failed": "Login failed",
+    "success": "Operation successed!",
+    "fail": "Operation failed"
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "select": {
+    "placeholder": "Select an option"
+  },
+  "dashboard": {
+    "logo": "Dashboard",
+    "today_analysis": "Today Analysis",
+    "user": "user",
+    "client": "client",
+    "employeer": "employeer",
+    "month_analysis": "Month Analysis",
+    "customer_metrics": "Customer Metrics"
+  },
+  "user": {
+    "user_management": "User Management",
+    "no": "No",
+    "name": "Name",
+    "role": "Role",
+    "last_visit_at": "LastVisitAt"
+  },
+  "Sidebar": {
+    "logo": "Guest Counting",
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "users": "Users Management",
+    "roles": "Roles Management",
+    "sessions": "Sessions Management",
+    "customers": "Customer Management",
+    "history": "History",
+    "cameras": "Cameras Management",
+    "images": "Image Management",
+    "constants": "Constants Management"
+  },
+  "HistoryManagement": {
+    "title": "History Management",
+    "searchPlaceholder": "Search...",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "select": "Select",
+    "deselect": "Deselect",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this history?",
+    "table": {
+      "selected": "Selected",
+      "no": "No",
+      "customerId": "Customer ID",
+      "cameraId": "Camera",
+      "seenAt": "Seen At"
+    }
+  },
+  "ImageManagement": {
+    "title": "Image Management",
+    "searchPlaceholder": "Search...",
+    "select": "Select",
+    "deselect": "Deselect",
+    "delete": "Delete",
+    "create": "Create",
+    "edit": "Edit Image",
+    "add": "Add Image",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "preview": "Preview",
+    "deleteConfirm": "Are you sure you want to delete this image?",
+    "customer": "Customer",
+    "camera": "Camera",
+    "history": "History",
+    "imageType": "Image Type",
+    "imageUrl": "Image URL",
+    "imageUrlPlaceholder": "Enter image URL",
+    "selectCustomer": "Select Customer",
+    "selectCamera": "Select Camera",
+    "selectHistory": "Select History",
+    "selectImageType": "Select Image Type",
+    "table": {
+      "no": "No",
+      "image": "Image",
+      "customer": "Customer",
+      "camera": "Camera",
+      "history": "History",
+      "imageType": "Image Type"
+    }
+  },
+  "ConstantManagement": {
+    "title": "Constant Management",
+    "searchPlaceholder": "Search...",
+    "create": "Create",
+    "edit": "Edit Constant",
+    "add": "Add Constant",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this constant?",
+    "name": "Name",
+    "value": "Value",
+    "namePlaceholder": "Enter name",
+    "valuePlaceholder": "Enter value",
+    "table": {
+      "no": "No",
+      "name": "Name",
+      "value": "Value"
+    }
+  },
+    "SessionManagement": {
+    "title": "Session Management",
+    "searchPlaceholder": "Search...",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "select": "Select",
+    "deselect": "Deselect",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this session?",
+    "table": {
+      "selected": "Selected",
+      "no": "No",
+      "customerName": "Customer Name",
+      "name": "Session",
+      "updatedAt": "Date"
+    }
+  },
+  "UserManagement": {
+    "title": "User Management",
+    "searchPlaceholder": "Search...",
+    "create": "Create",
+    "edit": "Edit User",
+    "add": "Create User",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this user?",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "role": "Role",
+    "selectRole": "Select Role",
+    "active": "Active",
+    "roles": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "table": {
+      "no": "No",
+      "name": "Username",
+      "role": "Role",
+      "lastVisitAt": "Last Visit"
+    }
+  },
+  "RoleManagement": {
+    "title": "Role Management",
+    "searchPlaceholder": "Search...",
+    "create": "Create",
+    "edit": "Edit Role",
+    "add": "Add Role",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this role?",
+    "name": "Name",
+    "namePlaceholder": "Enter role name",
+    "table": {
+      "no": "No",
+      "name": "Name",
+      "updatedAt": "Updated At"
+    }
+  },
+  "CameraManagement": {
+    "title": "Camera Management",
+    "searchPlaceholder": "Search...",
+    "create": "Create",
+    "edit": "Edit Camera",
+    "add": "Add Camera",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this camera?",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter camera title",
+    "subTitleLabel": "Sub Title",
+    "subTitlePlaceholder": "Enter camera subtitle",
+    "floorNumLabel": "Floor Number",
+    "floorNumPlaceholder": "Enter floor number",
+    "floorSubNumLabel": "Floor Sub Number",
+    "floorSubNumPlaceholder": "Enter floor sub number",
+    "table": {
+      "no": "No",
+      "title": "Title",
+      "subTitle": "Sub Title",
+      "floorNum": "Floor",
+      "floorSubNum": "Sub Floor"
+    }
+  },
+    "CustomerManagement": {
+    "title": "Customer Management",
+    "searchPlaceholder": "Search...",
+    "create": "Create",
+    "edit": "Edit Customer",
+    "add": "Add Customer",
+    "close": "Close",
+    "saveChanges": "Save Changes",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this user?",
+    "roleLabel": "Role",
+    "nameLabel": "Name",
+    "detailLabel": "Detail",
+    "namePlaceholder": "Enter customer name",
+    "detailPlaceholder": "Enter detail",
+    "table": {
+      "no": "No",
+      "role": "Role",
+      "name": "Name",
+      "detail": "Detail",
+      "lastVisitAt": "Last Visit"
+    }
+  }
+}

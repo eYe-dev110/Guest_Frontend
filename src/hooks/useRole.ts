@@ -4,6 +4,7 @@ import { Role } from "@/lib/types/role";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CreateRolePayload, UpdateRolePayload } from "@/lib/types/role";
+import { useTranslations } from "next-intl";
 
 export const useRole = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -17,15 +18,16 @@ export const useRole = () => {
   });
 
   const [open, setOpen] = useState<boolean>(false);
+  const t = useTranslations("toast")
 
   const handleRemove = (id: number) => {
     removeRole(id)
       .then(() => {
         setRoles((prevRoles) => prevRoles.filter((role) => role.id !== id));
-        toast.success("Role deleted successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to delete role");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
       });
   };
 
@@ -41,10 +43,10 @@ export const useRole = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Role updated successfully");
+        toast.success(t("success"));
       })
-      .catch(() => {
-        toast.error("Failed to update role");
+      .catch((error) => {
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };
@@ -61,10 +63,10 @@ export const useRole = () => {
           setPagination(meta);
         });
         setOpen(false);
-        toast.success("Role created successfully");
+        toast.success(t("success"));
       })
       .catch((error) => {
-        toast.error(error.response.data.message || "Failed to create role");
+        toast.error(error.response?.data?.message || t("fail"));
         setOpen(false);
       });
   };

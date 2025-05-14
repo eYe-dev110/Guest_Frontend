@@ -19,10 +19,11 @@ import { useSession } from "@/hooks/useSession";
 import DatePicker from "@/components/form/date-picker";
 import Button from "@/components/ui/button/Button";
 import Checkbox from "@/components/form/input/Checkbox";
-
-const headers = ["No", "CustomerName", "Name", "UpdatedAt", ""];
+import { useTranslations } from "next-intl";
 
 export default function SessionManagement() {
+  const t = useTranslations("SessionManagement");
+
   const { showConfirm, ConfirmModal } = useConfirm();
   const [multiSelect, setMultiSelect] = useState<boolean>(false);
   const [selecetedIds, setSelectedIds] = useState<number[]>([]);
@@ -41,12 +42,20 @@ export default function SessionManagement() {
 
   useEffect(() => setSelectedIds([]), [multiSelect]);
 
+  const headers = [
+    t("table.no"),
+    t("table.customerName"),
+    t("table.name"),
+    t("table.updatedAt"),
+    ""
+  ];
+
   return (
-    <ComponentCard title="Session Management">
+    <ComponentCard title={t("title")}>
       <div className="w-full grid grid-cols-4 gap-4">
         <div className="col-span-1">
           <Input
-            placeholder="search..."
+            placeholder={t("searchPlaceholder")}
             type="text"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -55,6 +64,7 @@ export default function SessionManagement() {
         <div className="col-span-1">
           <DatePicker
             id="start_date"
+            placeholder={t("startDate")}
             mode="single"
             onChange={(_, currentDateString) => {
               setStartDate(currentDateString);
@@ -64,6 +74,7 @@ export default function SessionManagement() {
         <div className="col-span-1">
           <DatePicker
             id="end_date"
+            placeholder={t("endDate")}
             mode="single"
             onChange={(_, currentDateString) => {
               setEndDate(currentDateString);
@@ -76,7 +87,7 @@ export default function SessionManagement() {
             size="sm"
             onClick={() => setMultiSelect((prevState) => !prevState)}
           >
-            {multiSelect ? "Deselect" : "Select"}
+            {multiSelect ? t("deselect") : t("select")}
           </Button>
           <Button
             variant="primary"
@@ -84,19 +95,19 @@ export default function SessionManagement() {
             onClick={() => handleMultiRemove(selecetedIds)}
             disabled={selecetedIds.length === 0}
           >
-            Delete
+            {t("delete")}
           </Button>
         </div>
       </div>
+
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w-full overflow-x-auto">
           <div className="min-w-[1102px]">
             <Table>
-              {/* Table Header */}
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
                   {headers.map((header, index) => {
-                    if (!multiSelect && header == "Selected") return;
+                    if (!multiSelect && header === t("table.selected")) return;
                     return (
                       <TableCell
                         key={index}
@@ -110,7 +121,6 @@ export default function SessionManagement() {
                 </TableRow>
               </TableHeader>
 
-              {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {sessions.map((session, index) => (
                   <TableRow key={session.id}>
@@ -119,13 +129,11 @@ export default function SessionManagement() {
                         <Checkbox
                           checked={selecetedIds.includes(session.id)}
                           onChange={() => {
-                            if (selecetedIds.includes(session.id))
-                              setSelectedIds([
-                                ...selecetedIds.filter(
-                                  (id) => id != session.id,
-                                ),
-                              ]);
-                            else setSelectedIds([...selecetedIds, session.id]);
+                            setSelectedIds((prev) =>
+                              prev.includes(session.id)
+                                ? prev.filter((id) => id !== session.id)
+                                : [...prev, session.id]
+                            );
                           }}
                         />
                       </TableCell>
@@ -148,9 +156,8 @@ export default function SessionManagement() {
                           className="w-fit h-fit cursor-pointer"
                           onClick={() => {
                             showConfirm({
-                              title:
-                                "Are you sure you want to delete this user?",
-                              positiveText: "Delete",
+                              title: t("deleteConfirm"),
+                              positiveText: t("delete"),
                               positiveAction: () => handleRemove(session.id),
                             });
                           }}
@@ -166,6 +173,7 @@ export default function SessionManagement() {
           </div>
         </div>
       </div>
+
       <div className="w-full flex flex-row-reverse">
         <Pagination
           currentPage={pagination.current_page}

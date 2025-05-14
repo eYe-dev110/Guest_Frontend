@@ -11,6 +11,7 @@ import { login as loginApi, register as registerApi } from "@/lib/api/auth";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { User } from "@/lib/types/user";
+import { useTranslations } from "next-intl";
 
 interface AuthContextType {
   user: User | null;
@@ -28,6 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("toast")
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,11 +46,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", data.user.user_name);
         router.push("/");
-        toast.success("Login successful!");
+        toast.success(t("login_success"));
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Login failed");
+        toast.error(t("login_failed"));
       });
   };
 
