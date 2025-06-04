@@ -17,11 +17,9 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Image from "next/image";
 import { useConfirm } from "@/hooks/useConfirm";
-import { useCamera } from "@/hooks/useCamera";
 import { useImage } from "@/hooks/useImage";
 import Select from "@/components/form/Select";
 import { useCustomer } from "@/hooks/useCustomer";
-import { useHistory } from "@/hooks/useHistory";
 import Checkbox from "@/components/form/input/Checkbox";
 import { useTranslations } from "next-intl";
 
@@ -32,9 +30,6 @@ export default function ImageManagement() {
   const [editMode, setEditMode] = useState<boolean>(false);
 
   const [customerId, setCustomerId] = useState<string>("");
-  const [cameraId, setCameraId] = useState<string>("");
-  const [historyId, setHistoryId] = useState<string>("");
-  const [imageType, setImageType] = useState<"camera" | "face" | null>(null);
   const [url, setUrl] = useState<string>("");
 
   const { showConfirm, ConfirmModal } = useConfirm();
@@ -59,14 +54,9 @@ export default function ImageManagement() {
     handleAdd,
   } = useImage();
   const { customers } = useCustomer();
-  const { cameras } = useCamera();
-  const { histories } = useHistory();
 
   const reset = () => {
     setCustomerId("");
-    setCameraId("");
-    setHistoryId("");
-    setImageType(null);
     setUrl("");
   };
 
@@ -77,9 +67,6 @@ export default function ImageManagement() {
     const image = images.find((image) => image.id === id);
     if (image) {
       setCustomerId(image.customer?.id?.toString() ?? "");
-      setCameraId(image.camera?.id?.toString() ?? "");
-      setHistoryId(image.history?.id?.toString() ?? "");
-      setImageType(image.image_type);
       setUrl(image.url);
     }
     setOpen(true);
@@ -94,9 +81,6 @@ export default function ImageManagement() {
   const handleClick = () => {
     const payload = {
       customer_id: customerId ? Number(customerId) : undefined,
-      camera_id: cameraId ? Number(cameraId) : undefined,
-      history_id: historyId ? Number(historyId) : undefined,
-      image_type: imageType,
       url,
     };
     if (editMode) {
@@ -113,9 +97,6 @@ export default function ImageManagement() {
     t("table.no"),
     t("table.image"),
     t("table.customer"),
-    t("table.camera"),
-    t("table.history"),
-    t("table.imageType"),
     "",
   ];
 
@@ -210,13 +191,6 @@ export default function ImageManagement() {
                     </TableCell>
                     <TableCell>{image.customer?.name ?? ""}</TableCell>
                     <TableCell>
-                      {image.camera
-                        ? image.camera.title + image.camera.sub_title
-                        : ""}
-                    </TableCell>
-                    <TableCell>{image.history?.id ?? ""}</TableCell>
-                    <TableCell>{image.image_type}</TableCell>
-                    <TableCell>
                       <div className="flex flex-row gap-6">
                         <div
                           className="cursor-pointer"
@@ -271,42 +245,6 @@ export default function ImageManagement() {
               }))}
               defaultValue={customerId}
               onChange={setCustomerId}
-            />
-          </div>
-          <div className="col-span-2">
-            <Label>{t("camera")}</Label>
-            <Select
-              placeholder={t("selectCamera")}
-              options={cameras.map((c) => ({
-                value: c.id.toString(),
-                label: c.title + c.sub_title,
-              }))}
-              defaultValue={cameraId}
-              onChange={setCameraId}
-            />
-          </div>
-          <div className="col-span-2">
-            <Label>{t("history")}</Label>
-            <Select
-              placeholder={t("selectHistory")}
-              options={histories.map((h) => ({
-                value: h.id.toString(),
-                label: h.id.toString(),
-              }))}
-              defaultValue={historyId}
-              onChange={setHistoryId}
-            />
-          </div>
-          <div className="col-span-2">
-            <Label>{t("imageType")}</Label>
-            <Select
-              placeholder={t("selectImageType")}
-              options={[
-                { value: "camera", label: "camera" },
-                { value: "face", label: "face" },
-              ]}
-              defaultValue={imageType ?? ""}
-              onChange={(value) => setImageType(value as "camera" | "face")}
             />
           </div>
           <div className="col-span-2">
